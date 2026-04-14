@@ -1,0 +1,37 @@
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: sqlserver_taskapp
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Password123!"
+    ports:
+      - "1433:1433"
+    volumes:
+      - sql_data:/var/opt/mssql
+
+  backend:
+    build: ./backend
+    container_name: backend_taskapp
+    ports:
+      - "3000:3000"
+    environment:
+      DB_USER: sa
+      DB_PASSWORD: "Password123!"
+      DB_SERVER: sqlserver
+      DB_DATABASE: TaskAppDB
+      DB_PORT: 1433
+    depends_on:
+      - sqlserver
+    restart: on-failure
+
+  frontend:
+    build: ./frontend
+    container_name: frontend_taskapp
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+volumes:
+  sql_data:
