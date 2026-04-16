@@ -8,28 +8,36 @@ GO
 USE TaskAppDB;
 GO
 
--- Crear tabla
+-- Eliminar tabla si existe (solo para desarrollo)
 DROP TABLE IF EXISTS Tasks;
 GO
 
+-- Crear tabla con borrado lógico
 CREATE TABLE Tasks (
     Id INT IDENTITY(1,1) PRIMARY KEY,
     Title NVARCHAR(255) NOT NULL,
     Description NVARCHAR(MAX),
     Completed BIT NOT NULL DEFAULT 0,
-    CreatedAt DATETIME NOT NULL DEFAULT GETDATE()
+    CreatedAt DATETIME NOT NULL DEFAULT GETDATE(),
+    DeletedAt DATETIME NULL
 );
 GO
 
+-- =====================================
 -- Stored Procedures
+-- =====================================
 
+-- Obtener solo tareas activas
 CREATE PROCEDURE GetTasks
 AS
 BEGIN
-    SELECT * FROM Tasks;
+    SELECT *
+    FROM Tasks
+    WHERE DeletedAt IS NULL;
 END;
 GO
 
+-- Crear tarea
 CREATE PROCEDURE CreateTask
     @Title NVARCHAR(255),
     @Description NVARCHAR(MAX)
@@ -42,6 +50,7 @@ BEGIN
 END;
 GO
 
+-- Marcar/desmarcar completada (solo si no está eliminada)
 CREATE PROCEDURE ToggleTask
     @Id INT
 AS
@@ -51,18 +60,25 @@ BEGIN
         WHEN Completed = 1 THEN 0 
         ELSE 1 
     END
-    WHERE Id = @Id;
+    WHERE Id = @Id
+      AND DeletedAt IS NULL;
 
-    SELECT * FROM Tasks WHERE Id = @Id;
+    SELECT *
+    FROM Tasks
+    WHERE Id = @Id
+      AND DeletedAt IS NULL;
 END;
 GO
 
-CREATE PROCEDURE DeleteTask
+-- Borrado lógico
+CREATE PROCEDURE SoftDeleteTask
     @Id INT
 AS
 BEGIN
-    DELETE FROM Tasks
-    WHERE Id = @Id;
+    UPDATE Tasks
+    SET DeletedAt = GETDATE()
+    WHERE Id = @Id
+      AND DeletedAt IS NULL;
 END;
 GO
 

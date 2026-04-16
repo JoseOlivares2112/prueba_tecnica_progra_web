@@ -8,6 +8,7 @@
       v-for="task in tasks"
       :key="task.id"
       :task="task"
+      :highlighted="task.id === highlightedTaskId"
       @toggle="$emit('toggle', $event)"
       @delete="$emit('delete', $event)"
     />
@@ -27,6 +28,7 @@ type Task = {
 
 defineProps<{
   tasks: Task[];
+  highlightedTaskId?: number | null;
 }>();
 
 defineEmits<{

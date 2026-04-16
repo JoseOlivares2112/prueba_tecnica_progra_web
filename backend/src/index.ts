@@ -126,7 +126,7 @@ app.patch("/tasks/:id", async (req, res) => {
     await pool
       .request()
       .input("Id", id)
-      .execute("DeleteTask");
+      .execute("SoftDeleteTask");
 
     res.json({ message: "Tarea eliminada correctamente" });
   } catch (error) {
