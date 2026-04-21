@@ -1,6 +1,7 @@
 import express from "express";
 import { connectDB } from "./db";
 import cors from "cors";
+import { db } from "./knex";
 
 const app = express();
 const PORT = 3000;
@@ -123,10 +124,14 @@ app.patch("/tasks/:id", async (req, res) => {
   try {
     const pool = await connectDB();
 
-    await pool
+    const result = await pool
       .request()
       .input("Id", id)
       .execute("SoftDeleteTask");
+
+    if ((result.rowsAffected[0] ?? 0) === 0) {
+      return res.status(404).json({ message: "Tarea no encontrada" });
+    }
 
     res.json({ message: "Tarea eliminada correctamente" });
   } catch (error) {
@@ -135,6 +140,24 @@ app.patch("/tasks/:id", async (req, res) => {
   }
 });
 
+app.get("/tasks-knex", async (req, res) => {
+  try {
+    const result = await db("Tasks").whereNull("DeletedAt");
+
+    const tasks = result.map((task) => ({
+      id: task.Id,
+      title: task.Title,
+      description: task.Description,
+      completed: task.Completed,
+      createdAt: task.CreatedAt,
+    }));
+
+    res.json(tasks);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Error con Knex" });
+  }
+});
 
 const startServer = async () => {
   try {
