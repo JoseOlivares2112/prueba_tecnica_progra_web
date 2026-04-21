@@ -11,6 +11,12 @@
 			</div>
 		</div>
 
+		<nav class="nav-links">
+  			<router-link to="/" class="nav-link">Inicio</router-link>
+  			<router-link to="/crear" class="nav-link">Crear</router-link>
+  			<router-link to="/listar" class="nav-link">Lista de Tareas</router-link>
+		</nav>
+
 		<div class="search-container">
 			<select
 				class="search-mode"
@@ -158,6 +164,35 @@ const onEnterSearch = () => {
 
 .brand-copy {
 	min-width: 0;
+}
+
+.nav-links {
+	display: flex;
+	align-items: center;
+	gap: 0.65rem;
+	flex-wrap: wrap;
+}
+
+.nav-link {
+	text-decoration: none;
+	color: #1e293b;
+	font-size: 0.92rem;
+	font-weight: 600;
+	padding: 0.5rem 0.8rem;
+	border-radius: 0.65rem;
+	border: 1px solid transparent;
+	transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.nav-link:hover {
+	background: #eff6ff;
+	border-color: #bfdbfe;
+}
+
+.nav-link.router-link-active {
+	background: #dbeafe;
+	color: #1d4ed8;
+	border-color: #93c5fd;
 }
 
 .eyebrow {

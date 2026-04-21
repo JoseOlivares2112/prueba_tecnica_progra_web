@@ -11,7 +11,7 @@ const emit = defineEmits<{
   (e: "submit", payload: { title: string; description: string | null }): void;
 }>();
 
-const emitSubmit = (payload: any) => {
+const emitSubmit = (payload: { title: string; description: string | null }) => {
   emit("submit", payload);
 };
 </script>

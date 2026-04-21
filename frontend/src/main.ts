@@ -5,12 +5,9 @@ import 'vuetify/styles'
 import '@mdi/font/css/materialdesignicons.css'
 import router from "./router";
 
-createApp(App)
-  .use(router)
-  .mount("#app");
-
 const app = createApp(App)
 
 app.use(vuetify)
+app.use(router)
 
 app.mount('#app')

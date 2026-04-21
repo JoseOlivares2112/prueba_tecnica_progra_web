@@ -11,39 +11,16 @@
         @select-suggestion="handleSuggestionSelect"
       />
 
-      <v-container class="py-8" max-width="800">
-        <v-row justify="center">
-          <v-col cols="12">
-            <v-card elevation="6" rounded="xl" class="pa-6 mb-6">
-              <v-card-title class="text-h4 font-weight-bold">
-                Registro de tareas
-              </v-card-title>
-              
-              <TaskForm
-                :loading="loading"
-                 @submit="createTask"
-              />
-              
-            </v-card>
-          </v-col>
-
-          <v-col cols="12">
-            <v-card elevation="4" rounded="xl" class="pa-6">
-              <v-card-title class="text-h5 font-weight-bold mb-4">
-                Lista de tareas
-              </v-card-title>
-
-                <TaskList
-                  :tasks="filteredTasks"
-                  :highlighted-task-id="highlightedTaskId"
-                  @toggle="toggleTask"
-                  @delete="deleteTask"
-                />
-
-            </v-card>
-          </v-col>
-        </v-row>
-      </v-container>
+        <v-container class="py-8" max-width="800">
+          <router-view
+            :tasks="filteredTasks"
+            :loading="loading"
+            :highlighted-task-id="highlightedTaskId"
+            @submit="createTask"
+            @toggle="toggleTask"
+            @delete="deleteTask"
+          />
+        </v-container>
 
       <Footer />
     </v-main>
@@ -52,8 +29,6 @@
 
 <script setup lang="ts">
 import { computed, nextTick, onMounted, ref } from "vue";
-import TaskList from "./components/TaskList.vue";
-import TaskForm from "./components/TaskForm.vue";
 import Header from "./components/Header.vue";
 import Footer from './components/Footer.vue'
 

@@ -1,7 +1,7 @@
 <template>
   <TaskList
     :tasks="tasks"
-    :highlightedTaskId="highlightedTaskId"
+    :highlighted-task-id="highlightedTaskId"
     @toggle="$emit('toggle', $event)"
     @delete="$emit('delete', $event)"
   />
